@@ -1,10 +1,11 @@
-import { StyleSheet, Text, View,StatusBar, ImageBackground } from 'react-native'
+import { StyleSheet, Text, View,StatusBar, ImageBackground,TouchableOpacity } from 'react-native'
 import React from 'react'
 
 import LinearGradient from 'react-native-linear-gradient'
 import CustomButton from '../components/CustomButton'
 
-const Login = () => {
+
+const Login = ({navigation}) => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle='light-content' />
@@ -27,9 +28,17 @@ const Login = () => {
         <Text style={styles.description}>
           Discover more than 1000 food recipes in your hands and cooking it easily!
         </Text>
-        <View style={{justifyContent:'center'}}>
-          <CustomButton buttonText="Login" colors={['green','yellow']} />
-          <CustomButton buttonText="Signup" colors={[]} />
+        <View style={{justifyContent:'center',width:'100%'}}>
+          <CustomButton 
+            buttonText="Login" 
+            colors={['green','yellow']}
+            onPress={()=>navigation.navigate('Home')}
+          />
+          <CustomButton 
+            buttonText="Signup" 
+            colors={[]}
+            onPress={()=>navigation.navigate('Home')}
+          />         
         </View>        
       </View>
     </View>
@@ -70,5 +79,5 @@ const styles = StyleSheet.create({
       color:'grey',
       marginTop:20,
       width:'70%'
-    }
+    },
 })

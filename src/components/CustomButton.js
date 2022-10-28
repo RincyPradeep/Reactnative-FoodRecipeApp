@@ -1,13 +1,13 @@
-import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
+
 
 const CustomButton = ({buttonText,colors,onPress}) => {
     if(colors.length>0){
         return (
-            <TouchableOpacity onpress={onPress} style={styles.buttonContainer}>
+            <TouchableOpacity onPress={onPress} style={styles.buttonContainer}>
                 <LinearGradient
                     start={{x:0,y:0}}
                     end={{x:1,y:0}}
@@ -21,7 +21,7 @@ const CustomButton = ({buttonText,colors,onPress}) => {
     }
 
     return (
-        <TouchableOpacity onpress={onPress} style={styles.button}>
+        <TouchableOpacity onPress={onPress} style={styles.button}>
             <Text style={styles.buttonText}>{buttonText}</Text>
         </TouchableOpacity>
     )
