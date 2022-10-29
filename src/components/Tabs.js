@@ -10,40 +10,34 @@ const Tab = createBottomTabNavigator();
 
 const Tabs = () => {
   return (
-    // <Tab.Navigator screenOptions={{
-    //     // tabBarShowLabel:false,
-    //     headerShown:false,
-    //     tabBarActiveTintColor:'green',
-    //     tabBarInactiveTintColor:'gray',
-    //     tabBarStyle:{
-    //       position:'absolute',
-    //       bottom:0,
-    //       left:0,
-    //       right:0,
-    //       elevation:0,
-    //       backgroundColor:'#fff',
-    //       borderTopColor:'transparent',
-    //       height:70,
-    //     }
-    //   }}
-    // >
-
-    <Tab.Navigator screenOptions={({route})=>({
-      tabBarActiveTintColor:'gree',
+      <Tab.Navigator screenOptions={({route})=>({
+      tabBarShowLabel:false,
+      headerShown:false,
+      tabBarActiveTintColor:'green',
       tabBarInactiveTintColor:'black',
+      tabBarStyle:{
+        position:'absolute',
+        bottom:0,
+        left:0,
+        right:0,
+        elevation:0,
+        backgroundColor:'#e7e7e7',
+        borderTopColor:'transparent',
+        height:70,
+      },
       tabBarIcon:({focused,color,size})=>{
         let iconPath;
         if(route.name === 'HomeScreen'){
-          iconPath = focused ? require('../assets/icons/home.png') : require('../assets/icons/home.png')
+          iconPath = focused ? require('../assets/icons/home-active.png') : require('../assets/icons/home.png')
         }
         else if(route.name === 'Search'){
-          iconPath = focused ? require('../assets/icons/home.png') : require('../assets/icons/home.png')
+          iconPath = focused ? require('../assets/icons/magnifying-glass-active.png') : require('../assets/icons/magnifying-glass.png')
         }
         else if(route.name === 'Bookmark'){
-          iconPath = focused ? require('../assets/icons/home.png') : require('../assets/icons/home.png')
+          iconPath = focused ? require('../assets/icons/bookmark-active.png') : require('../assets/icons/bookmark.png')
         }
         else{
-          iconPath = focused ? require('../assets/icons/home.png') : require('../assets/icons/home.png')
+          iconPath = focused ? require('../assets/icons/settings-active.png') : require('../assets/icons/settings.png')
         }
         return <Image style={styles.image} source={iconPath} />
       }
@@ -53,38 +47,18 @@ const Tabs = () => {
         <Tab.Screen 
           name="HomeScreen" 
           component={Home}
-          // options={{
-          //   tabBarIcon:({focused})=>(
-          //     <TabIcon focused={focused} icon="require('../assets/icons/home.png')" />
-          //   )
-          // }}
         />
         <Tab.Screen 
           name="Search" 
           component={Home}
-          // options={{
-          //   tabBarIcon:({focused})=>(
-          //     <TabIcon focused={focused} icon="require('../assets/icons/home.png')" />
-          //   )
-          // }}
         />
         <Tab.Screen 
           name="Bookmark" 
           component={Home}
-          // options={{
-          //   tabBarIcon:({focused})=>(
-          //     <TabIcon focused={focused} icon="require('../assets/icons/home.png')" />
-          //   )
-          // }}
         />
         <Tab.Screen
           name="Settings" 
           component={Home} 
-          // options={{
-          //   tabBarIcon:({focused})=>(
-          //     <TabIcon focused={focused} icon="require('../assets/icons/home.png')" />
-          //   )
-          // }}
         />
     </Tab.Navigator>
   )

@@ -1,13 +1,24 @@
-import { SafeAreaView, StyleSheet, Text, View,FlatList,Image } from 'react-native'
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 
-const Home = () => {
-  const dummyData=[
-    {
-      id:1,
-      categories:['category1','category2','category3']
-    }
-  ]
+import { SafeAreaView, StyleSheet, Text, View,FlatList,Image, TouchableOpacity, TextInput } from 'react-native'
+
+import axios from 'axios'
+import TrendingCard from '../components/TrendingCard'
+
+
+const Home = ({navigation}) => {
+
+  const [recipes,setRecipes] = useState([])
+
+  useEffect(()=>{
+    axios.get("https://www.themealdb.com/api/json/v1/1/search.php?f=a").then((response)=>{
+      setRecipes(response.data.meals)
+      console.log("....................",response.data.meals)
+    }).catch(error=>{
+      console.log(error)
+    })
+  },[])
+
   const renderHeader=()=>{
     return(
       <View style={styles.header}>
@@ -16,21 +27,78 @@ const Home = () => {
             Hello Rincy
           </Text>
           <Text style={styles.headerDescription}>What you want to cook today?</Text>
-          {/* <Image style={{width:28,height:28}} source={require('../assets/icons/home.png')} /> */}
+        </View>
+        <TouchableOpacity>
+          <Image source={require('../assets/images/profile.png')} style={styles.headerImage} />
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
+  const renderSearchBar=()=>{
+    return(
+      <View style={styles.searchBarContainer}>
+        <Image style={styles.searchImage} source={require('../assets/icons/magnifying-glass.png')} />
+        <TextInput style={styles.searchInput} placeholder="Search Recipes..." placeholderTextColor='gray' />
+      </View>
+    )
+  }
+
+  const renderRecipeCard =()=>{
+    return(
+      <View style={styles.recipeCardContainer}>
+        <View style={styles.imageContainer}>
+          <Image style={styles.RecipeImage} source={require('../assets/images/recipe1.jpg')} />
+        </View>
+        <View style={styles.recipeCardTextContainer}>
+          <Text style={styles.recipeCardText}>
+            You have 12 recipes that you haven't tried yet.
+          </Text>
+          <TouchableOpacity style={styles.recipeShowLink}>
+            <Text style={styles.recipeLinkText}>See Recipes</Text>
+          </TouchableOpacity>
         </View>
       </View>
     )
   }
+
+  const renderTrendingSection =() =>{
+    return(
+      <View style={styles.trendingSectionContainer}>
+        <Text style={styles.trendingTitle}>Trending Recipes</Text>
+        <FlatList
+          data={recipes}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(item)=>item.idMeal.toString()}
+          renderItem={({item,index})=>{
+            return(             
+              <TrendingCard
+                key={index}
+                containerStyle={{marginLeft:index===0?20:0}}
+                recipeItem={item}
+                onPress={()=>navigation.navigate('Recipe',{recipe:item})}
+              />
+            )
+          }}
+        />
+      </View>
+    )
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={dummyData.categories}
-        keyExtractor={item=>item.id.toString()}
+        data={recipes}
+        keyExtractor={item=>item.idMeal.toString()}
         keyboardDismissMode='on-drag'
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           <View>
             {renderHeader()}
+            {renderSearchBar()}
+            {renderRecipeCard()}
+            {renderTrendingSection()}
           </View>
         }
       />
@@ -63,5 +131,71 @@ const styles = StyleSheet.create({
     fontSize:16,
     marginTop:3,
     color:'gray'
+  },
+  headerImage:{
+    width:40,
+    height:40
+  },
+  searchBarContainer:{
+    flexDirection:'row',
+    height:50,
+    alignItems:'center',
+    marginHorizontal:20,
+    paddingHorizontal:10,
+    borderRadius:10,
+    backgroundColor:"#e7e7e7"
+  },
+  searchImage:{
+    width:20,
+    height:20,
+    tintColor:'green'
+  },
+  searchInput:{
+    flex:1,
+    marginLeft:20,
+    paddingHorizontal:10
+  },
+  recipeCardContainer:{
+    flexDirection:'row',
+    marginHorizontal:20,
+    marginTop:50,
+    backgroundColor:'#b8e994',
+    borderRadius:10,
+    paddingHorizontal:10,
+    paddingVertical:20
+  },
+  imageContainer:{
+    width:100,
+    alignItems:'center',
+    justifyContent:'center'
+  },
+  RecipeImage:{
+    width:80,
+    height:80
+  },
+  recipeCardTextContainer:{
+    flex:1,
+    paddingVertical:10
+  },
+  recipeCardText:{
+    fontSize:14,
+    color:"#000",
+    width:'70%'
+  },
+  recipeShowLink:{
+    marginTop:20,
+  },
+  recipeLinkText:{
+    color:"green",
+    fontSize:16,
+    textDecorationLine:'underline'
+  },
+  trendingSectionContainer:{
+    marginTop:20
+  },
+  trendingTitle:{
+    marginHorizontal:20,
+    fontSize:24,
+    color:"gray"
   }
 })
