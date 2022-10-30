@@ -4,20 +4,40 @@ import { SafeAreaView, StyleSheet, Text, View,FlatList,Image, TouchableOpacity, 
 
 import axios from 'axios'
 import TrendingCard from '../components/TrendingCard'
+import CategoryCard from '../components/CategoryCard'
 
 
 const Home = ({navigation}) => {
 
   const [recipes,setRecipes] = useState([])
+  const [categories,setCategories] = useState([])
 
   useEffect(()=>{
-    axios.get("https://www.themealdb.com/api/json/v1/1/search.php?f=a").then((response)=>{
-      setRecipes(response.data.meals)
-      console.log("....................",response.data.meals)
-    }).catch(error=>{
-      console.log(error)
-    })
+    fetchRecipes();
+    fetchCategories()
   },[])
+
+  const fetchRecipes =()=>{
+    return(
+      axios.get("https://www.themealdb.com/api/json/v1/1/search.php?f=a").then((response)=>{
+        setRecipes(response.data.meals)
+        // console.log("....................",response.data.meals)
+      }).catch(error=>{
+        console.log(error)
+      })
+    )
+  }
+
+  const fetchCategories =() =>{
+    return(
+      axios.get("https://www.themealdb.com/api/json/v1/1/categories.php").then((response)=>{
+        setCategories(response.data.categories)
+        console.log("....................",response.data.categories)
+      }).catch(error=>{
+        console.log(error)
+      })
+    )
+  }
 
   const renderHeader=()=>{
     return(
@@ -86,11 +106,22 @@ const Home = ({navigation}) => {
     )
   }
 
+  const renderCategoryHeader=()=>{
+    return(
+      <View style={styles.categoryContainer}>
+        <Text style={styles.categoryText}>Categories</Text>
+        <TouchableOpacity>
+          <Text style={styles.textLink}>View All</Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={recipes}
-        keyExtractor={item=>item.idMeal.toString()}
+        data={categories}
+        keyExtractor={item=>item.idCategory.toString()}
         keyboardDismissMode='on-drag'
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
@@ -99,6 +130,21 @@ const Home = ({navigation}) => {
             {renderSearchBar()}
             {renderRecipeCard()}
             {renderTrendingSection()}
+            {renderCategoryHeader()}
+          </View>
+        }
+        renderItem = {({item})=>{
+          return(
+            <CategoryCard 
+              categoryItem={item}
+              containerStyle={{marginHorizontal:20}}
+              onPress={()=>navigation.navigate('Recipe',{recipe:item})}
+            />
+          )
+        }}
+        ListFooterComponent={
+          <View style={styles.listFooter}>
+
           </View>
         }
       />
@@ -143,7 +189,7 @@ const styles = StyleSheet.create({
     marginHorizontal:20,
     paddingHorizontal:10,
     borderRadius:10,
-    backgroundColor:"#e7e7e7"
+    backgroundColor:"#dfe6e9"
   },
   searchImage:{
     width:20,
@@ -191,11 +237,29 @@ const styles = StyleSheet.create({
     textDecorationLine:'underline'
   },
   trendingSectionContainer:{
-    marginTop:20
+    marginTop:30
   },
   trendingTitle:{
     marginHorizontal:20,
     fontSize:24,
-    color:"gray"
+    color:"#2d3436"
+  },
+  categoryContainer:{
+    flexDirection:'row',
+    alignItems:'center',
+    marginTop:20,
+    marginHorizontal:20
+  },
+  categoryText:{
+    flex:1,
+    color:'#2d3436',
+    fontSize:24
+  },
+  textLink:{
+    color:'#2d3436',
+    fontSize:16
+  },
+  listFooter:{
+    marginBottom:100
   }
 })
