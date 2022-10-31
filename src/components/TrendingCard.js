@@ -67,12 +67,13 @@ const styles = StyleSheet.create({
         borderRadius:10
     },
     trendingCardImage:{
-        width:250,
-        height:300,
+        width:'100%',
+        height:'100%',
         borderRadius:10,    
     },
     categoryContainer:{
         position:'absolute',
+        // width:'50%',
         top:20,
         left:15,
         paddingHorizontal:10,

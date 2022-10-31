@@ -1,72 +1,90 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 
-import { StyleSheet, Text, View, Animated,TouchableOpacity, Image } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView } from 'react-native'
 
 
 const HEADER_HEIGHT = 350
 
-const Recipe = ({route}) => {
+const Recipe = ({route,navigation}) => {
 
   const [selectedRecipe, setSelectedRecipe] = useState(null)
 
   useEffect(()=>{
     const {recipe} = route.params
-    console.log("*********selected Recipe*******************",recipe)
+    // console.log("*********selected Recipe*******************",recipe)
     setSelectedRecipe(recipe)
   },[])
 
-  const scrollY = useRef(new Animated.Value(0).current)
-
-  const renderHeaderBar =() =>{
+  const renderIngredients =() =>{   
     return(
-      <View style={styles.recipeHeader}>
-        <Animated.View 
-          style={[styles.animatedOuterView,
-            {opacity:scrollY.interpolate({
-            inputRange:[HEADER_HEIGHT - 100, HEADER_HEIGHT - 70],
-            outputRange:[0,1]
-            })}
-          ]}
-        >
-          <Animated.View 
-            style={[styles.animatedInnerView,
-              {
-                opacity:scrollY.interpolate({
-                  inputRange:[HEADER_HEIGHT-100, HEADER_HEIGHT-50],
-                  outputRange:[0,1]
-                }),
-                transform:[
-                  {
-                    translateY:scrollY.interpolate({
-                      inputRange:[HEADER_HEIGHT-100, HEADER_HEIGHT-50],
-                      outputRange:[50,0],
-                      extrapolate:'clamp'
-                    })
-                  }
-                ]
-              }
-            ]}
-          >
-            <Text style={styles.animatedText}>
-                Author name
-            </Text>
-          </Animated.View>
-          <TouchableOpacity style={styles.backButton}>
-            <Image style={styles.backButtonImage} source={require('../assets/icons/back-arrow.png')} />
-          </TouchableOpacity>
-        </Animated.View>
+      <View style={styles.ingredientContainer}>
+        <View style={styles.ingredientRow}>
+          <Text>{selectedRecipe.strIngredient1 && selectedRecipe.strIngredient1}</Text>
+          <Text>{selectedRecipe.strMeasure1 && selectedRecipe.strMeasure1}</Text>
+        </View>
+        <View style={styles.ingredientRow}>
+          <Text>{selectedRecipe.strIngredient2 && selectedRecipe.strIngredient2}</Text>
+          <Text>{selectedRecipe.strMeasure2 && selectedRecipe.strMeasure2}</Text>
+        </View>
+        <View style={styles.ingredientRow}>
+          <Text>{selectedRecipe.strIngredient3 && selectedRecipe.strIngredient3}</Text>
+          <Text>{selectedRecipe.strMeasure3 && selectedRecipe.strMeasure3}</Text>
+        </View>
+        <View style={styles.ingredientRow}>
+          <Text>{selectedRecipe.strIngredient4 && selectedRecipe.strIngredient4}</Text>
+          <Text>{selectedRecipe.strMeasure4 && selectedRecipe.strMeasure4}</Text>
+        </View>
+        <View style={styles.ingredientRow}>
+          <Text>{selectedRecipe.strIngredient5 && selectedRecipe.strIngredient5}</Text>
+          <Text>{selectedRecipe.strMeasure5 && selectedRecipe.strMeasure5}</Text>
+        </View>
+        <View style={styles.ingredientRow}>
+          <Text>{selectedRecipe.strIngredient6 && selectedRecipe.strIngredient6}</Text>
+          <Text>{selectedRecipe.strMeasure6 && selectedRecipe.strMeasure6}</Text>
+        </View>
+        <View style={styles.ingredientRow}>
+          <Text>{selectedRecipe.strIngredient7 && selectedRecipe.strIngredient7}</Text>
+          <Text>{selectedRecipe.strMeasure7 && selectedRecipe.strMeasure7}</Text>
+        </View>
+        <View style={styles.ingredientRow}>
+          <Text>{selectedRecipe.strIngredient8 && selectedRecipe.strIngredient8}</Text>
+          <Text>{selectedRecipe.strMeasure8 && selectedRecipe.strMeasure8}</Text>
+        </View>
+        <View style={styles.ingredientRow}>
+          <Text>{selectedRecipe.strIngredient9 && selectedRecipe.strIngredient9}</Text>
+          <Text>{selectedRecipe.strMeasure9 && selectedRecipe.strMeasure9}</Text>
+        </View>
+        <View style={styles.ingredientRow}>
+          <Text>{selectedRecipe.strIngredient10 && selectedRecipe.strIngredient10}</Text>
+          <Text>{selectedRecipe.strMeasure10 && selectedRecipe.strMeasure10}</Text>
+        </View>
       </View>
     )
   }
 
+
   return (
-    <View style={styles.recipeContainer}> 
-      {/* <Animated.FlatList 
-        data={selectedRecipe?.}
-      />      */}
-      {renderHeaderBar()}
-      <Text>{selectedRecipe.strInstructions}</Text>
-    </View>
+    <ScrollView style={styles.recipeContainer}> 
+      <TouchableOpacity style={styles.backButton} onPress={()=>navigation.goBack()} >
+        <Image style={styles.backButtonImage} source={require('../assets/icons/back-arrow.png')} />
+      </TouchableOpacity>
+      {
+        selectedRecipe &&
+        <View>
+          <Image 
+            source={{uri:selectedRecipe.strMealThumb}}
+            resizeMode='cover'
+            style={styles.recipeImage}
+          />
+          <Text style={styles.recipeName}>{selectedRecipe.strMeal}</Text>
+          <Text style={{fontSize:18,fontWeight:'500'}}>Ingredients:</Text>
+          {renderIngredients()}
+          
+          <Text style={{fontSize:18,fontWeight:'500'}}>Method:</Text>
+          <Text style={styles.recipeInstruction}>{selectedRecipe.strInstructions}</Text>
+        </View>
+      }
+    </ScrollView>
   )
 }
 
@@ -75,56 +93,9 @@ export default Recipe
 const styles = StyleSheet.create({
   recipeContainer:{
     flex:1,
-    backgroundColor:"#fff"
-  },
-  recipeHeader:{
-    position:'absolute',
-    top:50,
-    left:0,
-    right:0,
-    height:0,
-    flexDirection:'row',
-    alignItems:'flex-end',
-    justifyContent:'space-between',
-    paddingHorizontal:10,
-    paddingBottom:10
-  },
-  animatedOuterView:{
-    position:'absolute',
-    top:100,
-    left:0,
-    right:0,
-    height:0,
-    backgroundColor:'#000',
-    // opacity:scrollY.interpolate({
-    //   inputRange:[HEADER_HEIGHT - 100, HEADER_HEIGHT - 70],
-    //   outputRange:[0,1]
-    // })
-  },
-  animatedInnerView:{
-    position:'absolute',
-    top:100,
-    left:0,
-    right:0,
-    height:0,
-    bottom:0,
-    alignItems:'center',
-    justifyContent:'flex-end',
-    paddingBottom:10,
-    // opacity:scrollY.interpolate({
-    //   inputRange:[HEADER_HEIGHT-100, HEADER_HEIGHT-50],
-    //   outputRange:[0,1]
-    // }),
-    // transform:[
-    //   {
-    //     translateY:scrollY.interpolate({
-    //       inputRange:[HEADER_HEIGHT-100, HEADER_HEIGHT-50]
-    //     })
-    //   }
-    // ]
-  },
-  animatedText:{
-    color:"#2d3436",
+    backgroundColor:"#fff",
+    paddingHorizontal:20,
+    paddingVertical:50
   },
   backButton:{
     alignItems:'center',
@@ -134,11 +105,37 @@ const styles = StyleSheet.create({
     borderRadius:18,
     borderWidth:1,
     borderColor:'#e7e7e7',
-    backgroundColor:"rgba(0,0,0,0.7)"
+    backgroundColor:"rgba(0,0,0,0.7)",
+    marginBottom:10
   },
   backButtonImage:{
     width:15,
     height:15,
     tintColor:'#e7e7e7'
+  },
+  recipeImage:{
+    height:300,
+    width:'100%',
+    marginBottom:50
+  },
+  recipeName:{
+    fontSize:24,
+    fontWeight:'600',
+    textAlign:'center',
+    color:'#000',
+    marginBottom:20,
+    textDecorationLine:'underline'
+  },
+  ingredientContainer:{
+    width:'70%',
+    marginVertical:10
+  },
+  ingredientRow:{
+    flexDirection:'row',
+    justifyContent:'space-between'
+  },
+  recipeInstruction:{
+    marginTop:10,
+    marginBottom:100
   }
 })

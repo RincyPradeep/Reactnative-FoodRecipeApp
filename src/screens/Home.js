@@ -19,7 +19,7 @@ const Home = ({navigation}) => {
 
   const fetchRecipes =()=>{
     return(
-      axios.get("https://www.themealdb.com/api/json/v1/1/search.php?f=a").then((response)=>{
+      axios.get("https://www.themealdb.com/api/json/v1/1/search.php?f=c").then((response)=>{
         setRecipes(response.data.meals)
         // console.log("....................",response.data.meals)
       }).catch(error=>{
@@ -32,7 +32,7 @@ const Home = ({navigation}) => {
     return(
       axios.get("https://www.themealdb.com/api/json/v1/1/categories.php").then((response)=>{
         setCategories(response.data.categories)
-        console.log("....................",response.data.categories)
+        // console.log("....................",response.data.categories)
       }).catch(error=>{
         console.log(error)
       })
@@ -138,7 +138,7 @@ const Home = ({navigation}) => {
             <CategoryCard 
               categoryItem={item}
               containerStyle={{marginHorizontal:20}}
-              onPress={()=>navigation.navigate('Recipe',{recipe:item})}
+              onPress={()=>navigation.navigate('RecipeList',{category:item})}
             />
           )
         }}
