@@ -1,8 +1,7 @@
-import React from 'react'
-
 import { StyleSheet, Text, TouchableOpacity, View, Image, Platform } from 'react-native'
-
 import {BlurView} from '@react-native-community/blur'
+
+import React from 'react'
 
 
 const recipeCardDetails =(recipeItem) =>{

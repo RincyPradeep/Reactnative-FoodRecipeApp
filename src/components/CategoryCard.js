@@ -1,6 +1,6 @@
-import React from 'react'
-
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
+
+import React from 'react'
 
 
 const CategoryCard = ({containerStyle,categoryItem,onPress}) => {
@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
     },
     categoryName:{
       fontSize:16,
-      color:"#000"
+      color:"#000",
+      fontFamily:"Roboto-Regular"
     }
 })

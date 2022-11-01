@@ -1,40 +1,44 @@
-import { StyleSheet, Text, View,FlatList, ScrollView} from 'react-native'
+import { StyleSheet, Text, View,FlatList, ActivityIndicator} from 'react-native'
+
 import React,{useState,useEffect} from 'react'
 
-import TrendingCard from '../components/TrendingCard'
 import axios from 'axios'
+
+import RecipeCard from '../components/RecipeCard'
+import BackButton from '../components/BackButton'
 
 
 const RecipeList = ({route}) => {
     const {category} = route.params
 
     const [categoryItems,setCategoryItems] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
+
 
     useEffect(()=>{
         axios.get(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category.strCategory}`).then((response)=>{
             setCategoryItems(response.data.meals)
-            console.log("....................",response.data.meals)
-      }).catch(error=>{
-        console.log(error)
-      })
+            setIsLoading(false)
+            // console.log("....................",response.data.meals)
+        }).catch(error=>{
+            console.log(error)
+        })
     },[])
 
   return (
     <View style={styles.recipeListContainer}>
+        <BackButton />
         <Text style={{fontSize:26,fontWeight:'500',marginVertical:20}}>{category.strCategory}</Text>
+        <ActivityIndicator size='large' color="green" animating={isLoading} />
         <FlatList
             data={categoryItems}
-            // horizontal
-            // showsHorizontalScrollIndicator={false}
             keyExtractor={(item)=>item.idMeal.toString()}
             numColumns={2}
             renderItem={({item,index})=>{
             return(             
-                <TrendingCard
+                <RecipeCard 
                     key={index}
-                    containerStyle={{width:150,height:200,marginTop:20}}
-                    recipeItem={item}
-                    onPress={()=>navigation.navigate('Recipe',{recipe:item})}
+                    recipeId={item.idMeal}
                 />
             )
             }}
@@ -47,6 +51,7 @@ export default RecipeList
 
 const styles = StyleSheet.create({
     recipeListContainer:{
-        marginHorizontal:40,
+        marginHorizontal:20,
+        marginVertical:20
     }
 })

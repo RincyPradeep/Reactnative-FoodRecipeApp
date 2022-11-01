@@ -1,8 +1,9 @@
+import { SafeAreaView, StyleSheet, Text, View,FlatList,Image, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native'
+
 import React,{useState,useEffect} from 'react'
 
-import { SafeAreaView, StyleSheet, Text, View,FlatList,Image, TouchableOpacity, TextInput } from 'react-native'
-
 import axios from 'axios'
+
 import TrendingCard from '../components/TrendingCard'
 import CategoryCard from '../components/CategoryCard'
 
@@ -11,6 +12,11 @@ const Home = ({navigation}) => {
 
   const [recipes,setRecipes] = useState([])
   const [categories,setCategories] = useState([])
+  const [isLoading, setIsLoading] = useState(null)
+  const [isSearchLoading, setIsSearchLoading] = useState(null)
+  const [searchItem,setSearchItem] = useState("")
+  const [searchRecipes,setSearchRecipes] = useState(null)
+  const [notFound,setNotFound] = useState(null)
 
   useEffect(()=>{
     fetchRecipes();
@@ -18,9 +24,11 @@ const Home = ({navigation}) => {
   },[])
 
   const fetchRecipes =()=>{
+    setIsLoading(true)
     return(
       axios.get("https://www.themealdb.com/api/json/v1/1/search.php?f=c").then((response)=>{
         setRecipes(response.data.meals)
+        setIsLoading(false)
         // console.log("....................",response.data.meals)
       }).catch(error=>{
         console.log(error)
@@ -58,8 +66,58 @@ const Home = ({navigation}) => {
   const renderSearchBar=()=>{
     return(
       <View style={styles.searchBarContainer}>
-        <Image style={styles.searchImage} source={require('../assets/icons/magnifying-glass.png')} />
-        <TextInput style={styles.searchInput} placeholder="Search Recipes..." placeholderTextColor='gray' />
+        <TextInput 
+          style={styles.searchInput} 
+          placeholder="Search Recipes..." 
+          placeholderTextColor='gray'
+          value={searchItem}
+          onChangeText ={(text)=>setSearchItem(text)} />
+        <TouchableOpacity onPress={fetchSearchItem}>
+          <Image style={styles.searchImage} source={require('../assets/icons/magnifying-glass.png')} />
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
+  const fetchSearchItem = () =>{
+    setNotFound(false)
+    if(searchItem !=""){
+      setSearchRecipes(null)
+      setIsSearchLoading(true)
+      axios.get(`https://www.themealdb.com/api/json/v1/1/search.php?s=${searchItem}`).then(response=>{
+      if(response.data.meals!=null)  
+        setSearchRecipes(response.data.meals)
+      else
+        setNotFound(true)
+      setIsSearchLoading(false)
+      }).catch(error=>{
+        console.log(error)
+      })
+    }else{
+      setSearchRecipes(null)
+    }
+  }
+
+  const renderSearchRecipes = () =>{
+    return(
+      <View style={styles.trendingSectionContainer}>
+        <Text style={styles.trendingTitle}>Searched Recipes:({searchRecipes.length} items)</Text>
+        <FlatList
+          data={searchRecipes}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(item)=>item.idMeal.toString()}
+          renderItem={({item,index})=>{
+            return(             
+              <TrendingCard
+                key={index}
+                containerStyle={{marginLeft:index===0?20:0}}
+                recipeItem={item}
+                onPress={()=>navigation.navigate('Recipe',{recipe:item})}
+              />
+            )
+          }}
+        />
       </View>
     )
   }
@@ -86,6 +144,7 @@ const Home = ({navigation}) => {
     return(
       <View style={styles.trendingSectionContainer}>
         <Text style={styles.trendingTitle}>Trending Recipes</Text>
+        <ActivityIndicator size='large' color="green" animating={isLoading} />
         <FlatList
           data={recipes}
           horizontal
@@ -128,6 +187,11 @@ const Home = ({navigation}) => {
           <View>
             {renderHeader()}
             {renderSearchBar()}
+            {searchRecipes && renderSearchRecipes()}
+            {isSearchLoading && 
+              <ActivityIndicator size='large' color="green" animating={isSearchLoading} />           
+            }
+            {notFound && <Text style={{textAlign:'center',marginTop:10}}>Recipe not found</Text>}
             {renderRecipeCard()}
             {renderTrendingSection()}
             {renderCategoryHeader()}
@@ -192,13 +256,12 @@ const styles = StyleSheet.create({
     backgroundColor:"#dfe6e9"
   },
   searchImage:{
-    width:20,
-    height:20,
+    width:30,
+    height:30,
     tintColor:'green'
   },
   searchInput:{
     flex:1,
-    marginLeft:20,
     paddingHorizontal:10
   },
   recipeCardContainer:{
@@ -242,7 +305,8 @@ const styles = StyleSheet.create({
   trendingTitle:{
     marginHorizontal:20,
     fontSize:24,
-    color:"#2d3436"
+    color:"#2d3436",
+    fontFamily:"Roboto-Regular"
   },
   categoryContainer:{
     flexDirection:'row',
