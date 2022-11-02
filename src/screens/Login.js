@@ -28,7 +28,7 @@ const Login = ({navigation}) => {
         <Text style={styles.description}>
           Discover more than 1000 food recipes in your hands and cooking it easily!
         </Text>
-        <View style={{justifyContent:'center',width:'100%'}}>
+        <View style={{flexDirection:'column',alignItems:'center',width:'100%'}}>
           <CustomButton 
             buttonText="Login" 
             colors={['green','yellow']}

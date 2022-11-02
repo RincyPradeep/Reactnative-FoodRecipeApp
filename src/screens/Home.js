@@ -193,7 +193,7 @@ const Home = ({navigation}) => {
             }
             {notFound && <Text style={{textAlign:'center',marginTop:10}}>Recipe not found</Text>}
             {renderRecipeCard()}
-            {renderTrendingSection()}
+            {/* {renderTrendingSection()} */}
             {renderCategoryHeader()}
           </View>
         }

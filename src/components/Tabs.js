@@ -4,6 +4,9 @@ import { StyleSheet,Image } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Home from '../screens/Home';
+import Settings from '../screens/Settings';
+import Bookmark from '../screens/Bookmark';
+import Notification from '../screens/Notification';
 
 
 const Tab = createBottomTabNavigator();
@@ -30,8 +33,8 @@ const Tabs = () => {
         if(route.name === 'HomeScreen'){
           iconPath = focused ? require('../assets/icons/home-active.png') : require('../assets/icons/home.png')
         }
-        else if(route.name === 'Search'){
-          iconPath = focused ? require('../assets/icons/magnifying-glass-active.png') : require('../assets/icons/magnifying-glass.png')
+        else if(route.name === 'Notification'){
+          iconPath = focused ? require('../assets/icons/bell-active.png') : require('../assets/icons/bell.png')
         }
         else if(route.name === 'Bookmark'){
           iconPath = focused ? require('../assets/icons/bookmark-active.png') : require('../assets/icons/bookmark.png')
@@ -49,16 +52,17 @@ const Tabs = () => {
           component={Home}
         />
         <Tab.Screen 
-          name="Search" 
-          component={Home}
+          options={{tabBarBadge:2}}
+          name="Notification" 
+          component={Notification}
         />
         <Tab.Screen 
           name="Bookmark" 
-          component={Home}
+          component={Bookmark}
         />
         <Tab.Screen
           name="Settings" 
-          component={Home} 
+          component={Settings} 
         />
     </Tab.Navigator>
   )

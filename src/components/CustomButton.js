@@ -1,18 +1,18 @@
-import React from 'react'
-
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
+
+import React from 'react'
 
 
 const CustomButton = ({buttonText,colors,onPress}) => {
     if(colors.length>0){
         return (
-            <TouchableOpacity onPress={onPress} style={styles.buttonContainer}>
+            <TouchableOpacity onPress={onPress} style={styles.loginButtonContainer}>
                 <LinearGradient
                     start={{x:0,y:0}}
                     end={{x:1,y:0}}
                     colors={colors}
-                    style={styles.button}
+                    style={styles.loginButton}
                 >
                     <Text style={styles.buttonText}>{buttonText}</Text>
                 </LinearGradient>
@@ -21,7 +21,7 @@ const CustomButton = ({buttonText,colors,onPress}) => {
     }
 
     return (
-        <TouchableOpacity onPress={onPress} style={styles.button}>
+        <TouchableOpacity onPress={onPress} style={styles.signUpButton}>
             <Text style={styles.buttonText}>{buttonText}</Text>
         </TouchableOpacity>
     )
@@ -30,17 +30,22 @@ const CustomButton = ({buttonText,colors,onPress}) => {
 export default CustomButton
 
 const styles = StyleSheet.create({
-    buttonContainer:{
-        
+    loginButtonContainer:{
+        width:'80%',
     },
-    button:{
+    loginButton:{
+        width:'100%',
+        borderRadius:10,
+        marginTop:40,
+        paddingVertical:10      
+    },
+    signUpButton:{
         width:'80%',
         borderColor:'green',
         borderWidth:2,
         borderRadius:10,
         marginTop:20,
-        paddingVertical:10,
-        justifyContent:'space-between'
+        paddingVertical:10
     },
     buttonText:{
         color:'#fff',

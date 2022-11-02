@@ -1,28 +1,18 @@
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import React, { useState, useEffect } from 'react'
 
 import BackButton from '../components/BackButton'
 
 
-const Recipe = ({route}) => {
+const Recipe_dummy = ({route}) => {
 
   const [selectedRecipe, setSelectedRecipe] = useState(null)
-  const [isBookmarked,setIsBookmarked] = useState(false)
-  // const [storageDataList,setStorageDataList] = useState([])
 
   useEffect(()=>{
-    console.log("Inside useEffect-------------------")
     const {recipe} = route.params
     setSelectedRecipe(recipe)
-    // AsyncStorage.clear()
   },[])
-
-  // useEffect(()=>{
-  //   if(selectedRecipe)
-  //     checkBookmarked(selectedRecipe.idMeal)
-  // },[isBookmarked])
 
   const renderIngredients =() =>{   
     return(
@@ -102,48 +92,15 @@ const Recipe = ({route}) => {
     )
   }
 
-  const saveBookmarks = async(id) =>{
-    const inputData = await AsyncStorage.getItem('bookmarks')
-    console.log("inputData:",inputData)
-    if (inputData !== null) {
-      console.log('Data Found', inputData);
-      // var newIds = JSON.parse(result).push(inputData);
-      var newIds = inputData.push(id);
-      AsyncStorage.setItem('bookmarks', JSON.stringify(newIds));
-    } else {
-      console.log('Data Not Found');
-      const result = [inputData] 
-      AsyncStorage.setItem('bookmarks', result);
-    }
-    // setIsBookmarked(true)
-  }
-
-  // const checkBookmarked = async(id) =>{
-  //   console.log("Check bookmarked called-----------")
-  //   const data = await AsyncStorage.getItem('bookmarks')
-  //   const outputData = JSON.parse(data)
-  //   console.log("OUTPUT DATA:",outputData)
-  //   console.log("ID:",id)
-  //   if(outputData === id){
-  //     console.warn("Bookmarked")
-  //     setIsBookmarked(true)
-  //   }else{
-  //     console.warn("Not Bookmarked")
-  //     setIsBookmarked(false)
-  //   }
-  // }
-
   return (
     <ScrollView style={styles.recipeContainer}> 
     {
         selectedRecipe &&
       <View style={styles.topContainer}>
         <BackButton />
-        <TouchableOpacity style={styles.bookmarkContainer} onPress={()=>saveBookmarks(selectedRecipe.idMeal)}>
+        <TouchableOpacity style={styles.bookmarkContainer}>
           <Image style={styles.bookmarkImage} 
-            // source={require("../assets/icons/bookmark-active.png")} />
-
-            source={isBookmarked ? (require("../assets/icons/bookmark-active.png")) : (require("../assets/icons/bookmark.png"))} />
+            source={require("../assets/icons/bookmark.png")} />
         </TouchableOpacity>
       </View>
     }
@@ -167,7 +124,7 @@ const Recipe = ({route}) => {
   )
 }
 
-export default Recipe
+export default Recipe_dummy
 
 const styles = StyleSheet.create({
   recipeContainer:{
